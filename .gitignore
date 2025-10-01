@@ -1,1 +1,11 @@
 !**/__pycache__/
+**/__pycache__/
+/__pycache__/
+
+!**/instance/
+**/instance/
+/instance/
+
+!**/env-blog/
+**/env-blog/
+/env-blog/
