@@ -16,4 +16,9 @@ def create_app():
     app.register_blueprint(auth.bp)
     app.register_blueprint(post.bp)
 
+    from .models import User, Post
+
+    with app.app_context():
+        db.create_all()
+
     return app
