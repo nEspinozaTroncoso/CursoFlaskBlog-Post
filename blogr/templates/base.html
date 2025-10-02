@@ -64,6 +64,18 @@
     {% endblock %}
 
 
+    {% for message in get_flashed_messages() %}
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="alert {% block message %} alert-danger {% endblock %}" role="alert">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
     {% block content %}
     {% endblock %}
     <script src="{{ url_for('static',filename = 'js/bootstrap.bundle.min.js') }}"></script>
