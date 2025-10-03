@@ -91,6 +91,37 @@ def login_required(view):
     return wrapped_view
 
 
-@bp.route("/profile")
-def profile():
-    return render_template("auth/profile.html")
+# Editar Perfil
+
+from werkzeug.utils import secure_filename
+
+
+@bp.route("/profile/<int:id>", methods=("GET", "POST"))
+@login_required
+def profile(id):
+    user = User.query.get_or_404(id)
+
+    if request.method == "POST":
+        user.username = request.form.get("username")
+        password = request.form.get("password")
+
+        error = None
+        if len(password) != 0:
+            user.password = generate_password_hash(password)
+        elif len(password) > 0 and len(password) < 6:
+            error = "La contraseña debe tener al menos 6 caracteres"
+
+        if request.files["photo"]:
+            photo = request.files["photo"]
+            photo.save(f"blogr/static/media/{secure_filename(photo.filename)}")
+            user.photo = f"media/{secure_filename(photo.filename)}"
+
+        if error is not None:
+            flash(error)
+        else:
+            db.session.commit()
+            return redirect(url_for("auth.profile", id=user.id))
+
+        flash(error)
+
+    return render_template("auth/profile.html", user=user)
